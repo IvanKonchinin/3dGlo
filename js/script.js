@@ -78,7 +78,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   //modal position default
   const popupContent = document.querySelector('.popup-content');
-  function setTopOuter() {
+  const setTopOuter = () => {
     const popup = document.querySelector('.popup');
     popup.style.cssText = `
       display:block;
@@ -86,13 +86,14 @@ window.addEventListener('DOMContentLoaded', () => {
       transition:.5s;
       visibility:hidden;
     `;
-    popupContent.style.top = '-100%';
+    (window.innerWidth > 768) ? popupContent.style.top = '-100%' : popupContent.style.top = '10%';
+    
   }
-
-  setTopOuter();
+  setTopOuter()
   
   //popup animation open
-  let modalStatus = false;
+  let modalStatus = false,
+      popupDrive;
   const modalShow = () => {
     modalStatus = true;
     let start = new Date().getTime(),
@@ -100,7 +101,7 @@ window.addEventListener('DOMContentLoaded', () => {
         finalTop = (window.innerHeight - popupContent.offsetHeight) / 2,
         offset = popupContent.offsetHeight + finalTop;
 
-    let popupDrive = function(){
+     popupDrive = function(){
       let now = new Date().getTime() - start,
           currTop = Math.round(startTop + offset * now / 400);
           currTop = (currTop > finalTop) ? finalTop : currTop;
@@ -123,7 +124,7 @@ window.addEventListener('DOMContentLoaded', () => {
         finalTop = -popupContent.offsetHeight,
         offset = popupContent.offsetHeight + (window.innerHeight - popupContent.offsetHeight) / 2;
 
-    let popupDrive = function () {
+     popupDrive = function () {
       let now = new Date().getTime() - start,
           currTop = Math.round(startTop - offset * now / 400);
           currTop = (currTop < finalTop) ? finalTop : currTop;
@@ -139,9 +140,11 @@ window.addEventListener('DOMContentLoaded', () => {
   //popup
   const togglePopup = () => {
     
+    
     const popup = document.querySelector('.popup'),
           popupBtn = document.querySelectorAll('.popup-btn'),
           popupClose = document.querySelector('.popup-close');
+          
     
     popupBtn.forEach((elem) => {
       elem.addEventListener('click', () => {
@@ -151,27 +154,25 @@ window.addEventListener('DOMContentLoaded', () => {
           visibility:visible;
           display:block;
         `;
-        (window.innerWidth <= 768) ? popupContent.style.top = '10%' : modalShow();
-        
+        (window.innerWidth > 768) ? modalShow() : popupContent.style.top = '10%';
       });
     });
 
     popupClose.addEventListener('click', () => {
-      (window.innerWidth <= 768) ? popupContent.style.top = '-100%' : modalClose();
       popup.style.cssText = `
       opacity:0;
       transition:.5s;
       visibility:hidden;
       display:block;
     `;
-      
+      (window.innerWidth > 768) ? modalClose() : popupContent.style.top = '10%';
     });
-    
   }
 
 //modal position of resize
   function setTopOpenOuter() {
     popupContent.style.top = (window.innerHeight - popupContent.offsetHeight) / 2 + 'px';
+    if (window.innerWidth > 768) setTopOuter();
   }
   window.addEventListener('resize', setTopOpenOuter);
 
