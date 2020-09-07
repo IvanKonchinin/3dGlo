@@ -323,7 +323,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    startSlide(15000);
+    startSlide(1500);
   };
 //makeDots
   const makeDots = (callback) => {
@@ -340,9 +340,29 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     callback();
   };
-
-  makeDots(()=>{slider()});
+  makeDots(slider);
   
+  //changeImgCommand
+  const changeImgCommand = (event) => {
+    let target = event.target;
+      if (target.matches('.command__photo')){
+        [target.src, target.dataset.img] = [target.dataset.img, target.src];
+      }
+  };
+  document.getElementById('command').addEventListener('mouseover', changeImgCommand);
+  document.getElementById('command').addEventListener('mouseout', changeImgCommand);
+
+  //validate calc inputs
+  const validateCalcInputs = () => {
+    const validateInputs = document.querySelector('.calc-block');
+    validateInputs.addEventListener('input', (event) => {
+      let target = event.target;
+      if(target.tagName === 'INPUT'){
+        target.value = target.value.replace(/\D/g, ''); 
+      }
+    });
+  };
+  validateCalcInputs();
 });
 
 
