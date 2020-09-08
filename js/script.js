@@ -364,6 +364,21 @@ window.addEventListener('DOMContentLoaded', () => {
   };
   validateCalcInputs();
 
+  const animate = ({timing, draw, duration}) =>{
+    let start = performance.now();
+    requestAnimationFrame(function myAnimate(time) {
+
+      let timeFraction = (time - start) / duration;
+      if (timeFraction > 1) timeFraction = 1;
+
+      let progress = timing(timeFraction);
+      draw(progress);
+      if (timeFraction < 1) {
+        requestAnimationFrame(myAnimate);
+      }
+    });
+  };
+
   //калькулятор
   const calc = (price = 100) => {
 
@@ -392,10 +407,19 @@ window.addEventListener('DOMContentLoaded', () => {
         dayValue *= 1.5;
       }
       if(typeValue && squareValue){
-        total = price * typeValue * squareValue * countValue * dayValue;      
+        total = price * typeValue * squareValue * countValue * dayValue; 
       }
-           
-      totalValue.textContent = total;
+      if (total > 0) {
+         animate({
+          duration: 500,
+          timing: function (timeFraction) {
+            return Math.pow(timeFraction, 5);
+          },
+          draw: function (progress) {
+            totalValue.textContent = Math.floor(progress * total);
+          }
+        });
+        }
     };
 
 
