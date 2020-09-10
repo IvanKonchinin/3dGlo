@@ -435,7 +435,15 @@ window.addEventListener('DOMContentLoaded', () => {
   //send-ajax-form
   const sendForm = () => {
     const errorMessage = 'Что-то пошло не так...',
-      loadMessage = 'Загрузка...',
+      loadMessage = `
+        <div class="sk-wave">
+          <div class="sk-rect sk-rect-1"></div> 
+          <div class="sk-rect sk-rect-2"></div> 
+          <div class="sk-rect sk-rect-3"></div> 
+          <div class="sk-rect sk-rect-4"></div> 
+          <div class="sk-rect sk-rect-5"></div>
+          </div>
+      `,
       successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
 
     const statusMessage = document.createElement('div');
@@ -458,7 +466,7 @@ window.addEventListener('DOMContentLoaded', () => {
       if (/^\+?[78]*\d{10}$/.test(currentPhoneInput.value)) {
         currentPhoneInput.style.border = '';
         target.appendChild(statusMessage);
-        statusMessage.textContent = loadMessage;
+        statusMessage.insertAdjacentHTML('afterbegin', loadMessage);
       postData(body, ()=>{
         statusMessage.textContent = successMessage;//callbackOutput()
       }, (error)=>{

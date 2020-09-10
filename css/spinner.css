@@ -1,0 +1,48 @@
+.sk-wave {
+  width: 6em;
+  height: 4em;
+  margin: auto;
+  text-align: center;
+  font-size: 1em;
+}
+
+.sk-wave .sk-rect {
+  background-color: #fff;
+  height: 100%;
+  width: 0.5em;
+  display: inline-block;
+  animation: sk-wave-stretch-delay 1.2s infinite ease-in-out;
+}
+
+.sk-wave .sk-rect-1 {
+  animation-delay: -1.2s;
+}
+
+.sk-wave .sk-rect-2 {
+  animation-delay: -1.3s;
+}
+
+.sk-wave .sk-rect-3 {
+  animation-delay: -1.4s;
+}
+
+.sk-wave .sk-rect-4 {
+  animation-delay: -1.5s;
+}
+
+.sk-wave .sk-rect-5 {
+  animation-delay: -1.6s;
+}
+
+@keyframes sk-wave-stretch-delay {
+
+  0%,
+  40%,
+  100% {
+    transform: scaleY(0.4);
+  }
+
+  20% {
+    transform: scaleY(1);
+  }
+}
