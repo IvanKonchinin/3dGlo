@@ -363,7 +363,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   };
   validateCalcInputs();
-
+//animate calc total
   const animate = ({timing, draw, duration}) =>{
     let start = performance.now();
     requestAnimationFrame(function myAnimate(time) {
@@ -431,6 +431,84 @@ window.addEventListener('DOMContentLoaded', () => {
     });      
   };
   calc(100);//сумма по умолчанию
+
+  //send-ajax-form
+  const sendForm = () => {
+    const errorMessage = 'Что-то пошло не так...',
+      loadMessage = 'Загрузка...',
+      successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
+
+    const statusMessage = document.createElement('div');
+
+    statusMessage.style.cssText = `font-size:2rem;`;
+    document.addEventListener('submit', (event)=>{
+      event.preventDefault();
+      let target = event.target;
+      
+      const formData = new FormData(target);
+      let currentPhoneInput = target.querySelector('input.form-phone');
+      
+      let body = {};
+      // for(let val of formData.entries()){
+      //   body[val[0]] = val[1];
+      // }
+      formData.forEach((val, key) => {
+        body[key] = val;
+      });
+      if (/^\+?[78]*\d{10}$/.test(currentPhoneInput.value)) {
+        currentPhoneInput.style.border = '';
+        target.appendChild(statusMessage);
+        statusMessage.textContent = loadMessage;
+      postData(body, ()=>{
+        statusMessage.textContent = successMessage;//callbackOutput()
+      }, (error)=>{
+          statusMessage.textContent = errorMessage;//callbackError()
+          console.error(error)});
+      } else {
+        currentPhoneInput.style.border = '2px solid red';
+        return;
+      }
+      clearInputsForms(target);
+    });
+ 
+    //clearInputsForms
+    const clearInputsForms = (target)=>{
+      let targetFormInputs = target.querySelectorAll('input');
+      targetFormInputs.forEach((item) => {
+        item.value = '';
+      });
+    };
+
+    //textInputsValidate
+    const textInputsValidate = ()=>{
+      document.addEventListener('click', (event) => {
+        let target = event.target;
+        if (target.matches('[name="user_name"]') || target.matches('[name="user_message"]')) {
+          target.addEventListener('input', ()=>{
+            target.value = target.value.replace(/[^а-яА-ЯёЁ,.!?\s]/, '');
+          });
+        }
+      });
+    };
+    textInputsValidate();
+
+    const postData = (body, callbackOutput, callbackError) => {
+      const request = new XMLHttpRequest();
+      request.addEventListener('readystatechange', () => {
+        if (request.readyState !== 4) return;
+        request.status === 200 ? callbackOutput() : callbackError(request.status);
+      });
+
+      request.open('POST', './server.php');
+      // request.setRequestHeader('Content-Type', 'multipart/form-data');//вариант формата отправки
+      request.setRequestHeader('Content-Type', 'application/json');
+
+     
+      // request.send(formData);//вариант формата отправки
+      request.send(JSON.stringify(body));
+    }
+  };
+  sendForm();
 });
 
 
