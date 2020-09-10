@@ -454,7 +454,7 @@ window.addEventListener('DOMContentLoaded', () => {
       let target = event.target;
       
       const formData = new FormData(target);
-      let currentPhoneInput = target.querySelector('input.form-phone');
+      let phoneInput = target.querySelector('input.form-phone');
       
       let body = {};
       // for(let val of formData.entries()){
@@ -463,8 +463,8 @@ window.addEventListener('DOMContentLoaded', () => {
       formData.forEach((val, key) => {
         body[key] = val;
       });
-      if (/^\+?[78]*\d{10}$/.test(currentPhoneInput.value)) {
-        currentPhoneInput.style.border = '';
+      if (/^\+?[78]*\d{10}$/.test(phoneInput.value)) {
+        phoneInput.style.border = '';
         target.appendChild(statusMessage);
         statusMessage.insertAdjacentHTML('afterbegin', loadMessage);
       postData(body, ()=>{
@@ -473,7 +473,7 @@ window.addEventListener('DOMContentLoaded', () => {
           statusMessage.textContent = errorMessage;//callbackError()
           console.error(error)});
       } else {
-        currentPhoneInput.style.border = '2px solid red';
+        target.style.cssText = 'border:2px solid red;background:#fff';
         return;
       }
       clearInputsForms(target);
@@ -487,18 +487,30 @@ window.addEventListener('DOMContentLoaded', () => {
       });
     };
 
-    //textInputsValidate
-    const textInputsValidate = ()=>{
-      document.addEventListener('click', (event) => {
+    //inputsValidate
+    const inputsValidate = ()=>{
+      document.addEventListener('input', (event) => {
         let target = event.target;
         if (target.matches('[name="user_name"]') || target.matches('[name="user_message"]')) {
-          target.addEventListener('input', ()=>{
             target.value = target.value.replace(/[^а-яА-ЯёЁ,.!?\s]/, '');
-          });
+        } 
+        else if (target.matches('[name="user_phone"]')){
+            target.value = target.value.replace( /[^\+?[0-9]/i,'');
+             if (/^\+?[78][0-9]{10}$/.test(target.value)) {
+              target.style.cssText = 'border:2px solid green';
+              target.setCustomValidity('');
+             }
+             else if (target.value.length === 0) {
+              target.style.border = '';
+             }
+             else{
+              target.setCustomValidity('Введите значение в формате +79273335544 или 89273335544');
+              target.style.cssText = 'border:2px solid red;';
+             }
         }
       });
     };
-    textInputsValidate();
+    inputsValidate();
 
     const postData = (body, callbackOutput, callbackError) => {
       const request = new XMLHttpRequest();
