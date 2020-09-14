@@ -467,11 +467,16 @@ window.addEventListener('DOMContentLoaded', () => {
         phoneInput.style.border = '';
         target.appendChild(statusMessage);
         statusMessage.insertAdjacentHTML('afterbegin', loadMessage);
-      postData(body, ()=>{
-        statusMessage.textContent = successMessage;//callbackOutput()
-      }, (error)=>{
-          statusMessage.textContent = errorMessage;//callbackError()
-          console.error(error)});
+      // postData(body, ()=>{
+      //   statusMessage.textContent = successMessage;//callbackOutput()
+      // }, (error)=>{
+      //     statusMessage.textContent = errorMessage;//callbackError()
+      //     console.error(error)});
+
+      postData(body)
+        .then(() => statusMessage.textContent = successMessage)//callbackOutput()    
+        .catch(error => console.error(error));
+
       } else {
         target.style.cssText = 'border:2px solid red;background:#fff';
         return;
@@ -512,11 +517,14 @@ window.addEventListener('DOMContentLoaded', () => {
     };
     inputsValidate();
 
-    const postData = (body, callbackOutput, callbackError) => {
+    const postData = (body) => {
+
+      return new Promise((resolve, reject) => {
+
       const request = new XMLHttpRequest();
       request.addEventListener('readystatechange', () => {
         if (request.readyState !== 4) return;
-        request.status === 200 ? callbackOutput() : callbackError(request.status);
+        request.status === 200 ? resolve() : reject(request.status);
       });
 
       request.open('POST', './server.php');
@@ -526,6 +534,9 @@ window.addEventListener('DOMContentLoaded', () => {
      
       // request.send(formData);//вариант формата отправки
       request.send(JSON.stringify(body));
+
+      });  
+
     }
   };
   sendForm();
