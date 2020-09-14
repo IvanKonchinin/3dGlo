@@ -457,9 +457,7 @@ window.addEventListener('DOMContentLoaded', () => {
       let phoneInput = target.querySelector('input.form-phone');
       
       let body = {};
-      // for(let val of formData.entries()){
-      //   body[val[0]] = val[1];
-      // }
+    
       formData.forEach((val, key) => {
         body[key] = val;
       });
@@ -467,15 +465,10 @@ window.addEventListener('DOMContentLoaded', () => {
         phoneInput.style.border = '';
         target.appendChild(statusMessage);
         statusMessage.insertAdjacentHTML('afterbegin', loadMessage);
-      // postData(body, ()=>{
-      //   statusMessage.textContent = successMessage;//callbackOutput()
-      // }, (error)=>{
-      //     statusMessage.textContent = errorMessage;//callbackError()
-      //     console.error(error)});
 
       postData(body)
-        .then(() => statusMessage.textContent = successMessage)//callbackOutput()    
-        .catch(error => console.error(error));
+        .then(() => statusMessage.textContent = successMessage)
+        .catch(() => statusMessage.textContent = errorMessage);
 
       } else {
         target.style.cssText = 'border:2px solid red;background:#fff';
