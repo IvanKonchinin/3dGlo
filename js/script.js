@@ -467,8 +467,16 @@ window.addEventListener('DOMContentLoaded', () => {
         statusMessage.insertAdjacentHTML('afterbegin', loadMessage);
 
       postData(body)
-        .then(() => statusMessage.textContent = successMessage)
-        .catch(() => statusMessage.textContent = errorMessage);
+        .then((response) => {
+          if(response.status !== 200){
+            throw new new Error('status network not 200');
+          }
+          statusMessage.textContent = successMessage;
+        })
+        .catch((error) => {
+          statusMessage.textContent = errorMessage;
+          console.error(error);
+        });
 
       } else {
         target.style.cssText = 'border:2px solid red;background:#fff';
@@ -512,24 +520,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const postData = (body) => {
 
-      return new Promise((resolve, reject) => {
-
-      const request = new XMLHttpRequest();
-      request.addEventListener('readystatechange', () => {
-        if (request.readyState !== 4) return;
-        request.status === 200 ? resolve() : reject(request.status);
+      return fetch('./server.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body),
+        credentials: 'include' //проверка cookie на сервере
       });
-
-      request.open('POST', './server.php');
-      // request.setRequestHeader('Content-Type', 'multipart/form-data');//вариант формата отправки
-      request.setRequestHeader('Content-Type', 'application/json');
-
-     
-      // request.send(formData);//вариант формата отправки
-      request.send(JSON.stringify(body));
-
-      });  
-
     }
   };
   sendForm();
