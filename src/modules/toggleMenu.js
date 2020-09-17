@@ -20,10 +20,10 @@
      });
    }
 
-   document.addEventListener('click', () => {
+   document.addEventListener('click', (event) => {
      let target = event.target;
-
-     if (target.closest('.menu') || target.closest('.close-btn') || (target.closest('li') && target.closest('menu'))) {
+    console.log(target);
+     if (target.closest('.menu') || target.closest('.close-btn') || (target.closest('a') && target.closest('menu'))) {
        handlerMenu(event);
      }
 

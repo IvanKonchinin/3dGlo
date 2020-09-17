@@ -44,7 +44,7 @@ const modalClose = function () {
 }
 
 const togglePopup = () => {
-  let windowWidth = window.innerWidth;
+  
   const popup = document.querySelector('.popup'),
     popupBtn = document.querySelectorAll('.popup-btn');
 
@@ -56,7 +56,7 @@ const togglePopup = () => {
           visibility:visible;
           display:block;
         `;
-      (windowWidth > 768) ? modalShow(): popupContent.style.top = '10%';
+      (window.innerWidth > 768) ? modalShow(): popupContent.style.top = '10%';
     });
   });
 
@@ -69,7 +69,7 @@ const togglePopup = () => {
           visibility:hidden;
           display:block;
         `;
-      (windowWidth > 768) ? modalClose(): popupContent.style.top = '10%';
+      (window.innerWidth > 768) ? modalClose(): popupContent.style.top = '10%';
     } else {
       target = target.closest('.popup-content');
       if (!target) {
@@ -80,11 +80,10 @@ const togglePopup = () => {
               visibility:hidden;
               display:block;
             `;
+      (window.innerWidth > 768) ? modalClose(): popupContent.style.top = '10%';
       }
     }
-
   });
-
 }
 
 export default togglePopup;

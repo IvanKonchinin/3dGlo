@@ -30,7 +30,9 @@
   //modal position of resize
   window.addEventListener('resize', setTopOpenOuter);
   //modal position default
-  setTopOuter()
+  
+  //setTopOpenOuter();
+  setTopOuter();
   //popup animation open
   //popup animation close 
   //popup
