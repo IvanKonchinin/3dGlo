@@ -72,10 +72,10 @@ class SliderCarousel{
         outline: none!important;
       }
       .glo-slider__next{
-        border-left-color: #19b5fe;
+        border-left-color: #19b5fe!important;
       }
       .glo-slider__prev {
-        border-right-color: #19b5fe;
+        border-right-color: #19b5fe!important;
       }
       .glo-slider__prev:hover, .glo-slider__next:hover{
         background-color: transparent !important;
